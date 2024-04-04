@@ -1,16 +1,27 @@
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.lang.module.FindException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.*;
 public class BookDA {
     private HashMap<String, Book> bookMap;
-    public HashMap<String, Book> getBookMap(){
-     return bookMap;
+    private HashMap<String, Author> authorMap;
+
+    public BookDA(HashMap<String, Author> authorMap) {
+        this.authorMap = authorMap;
     }
 
-    public BookDA() throws FileNotFoundException{
-        Scanner bookAuthorInfo = new Scanner(new FileReader("Book.csv"));
+    public HashMap<String, Book> getBookMap() {
+        return bookMap;
+    }
+
+    public void setBookMap(HashMap<String, Book> bookMap){
+        this.bookMap = bookMap;
+    }
+
+
+
+    public HashMap<String, Book> book1() throws IOException{
+        Scanner bookAuthorInfo = new Scanner(new FileReader("C:\\Users\\Luis Joshua\\OOPActivities\\LabSeatwork5\\src\\Book.csv"));
 
         bookMap = new HashMap<>();
 
@@ -19,14 +30,21 @@ public class BookDA {
             String[] ArrayBookInfo = new String[3];
             ArrayBookInfo = rowBookInfo.split(",");
 
-            Book book1 = new Book();
+            String isbn = ArrayBookInfo[0].trim();
+            String title = ArrayBookInfo[1].trim();
+            String authorName = ArrayBookInfo[2].trim();
 
-            book1.setIsbn(ArrayBookInfo[0].trim());
-            book1.setTitle(ArrayBookInfo[1].trim());
-            book1.setAuthorName(ArrayBookInfo[2].trim());
 
-            bookMap.put(book1.getIsbn(), book1);
+            Author author1 = authorMap.get(authorName);
+                if (author1 == null) {
+                    author1 = new Author(authorName, "");
+                }
+
+            Book book1 = new Book(isbn, title, author1);
+            bookMap.put(isbn,book1);
+
         }
         bookAuthorInfo.close();
+        return bookMap;
     }
 }
